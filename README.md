@@ -33,4 +33,4 @@ three.js は、物理シミュレーションを行うライブラリーに、<a
 
 捻れたのは2件。最新の 2.88ベースの方がいいので、最後のを使おうかな、と思っています。調べた時の最新のコミットは1312393(2019/5/9)でした。
 
-実験コードを<a href="http://userweb.pep.ne.jp/tamubun/computer/ammo_expr">ここ</a>に置いておきます。
+実験コードを<a href="https://tamubun.github.io/Ammo_expr/">ここ</a>に置いておきます。
