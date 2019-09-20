@@ -1,5 +1,5 @@
 'use strict';
-import * as THREE from '../../js/three/build/three.module.js';
+import * as THREE from './js/three/build/three.module.js';
 
 var camera, scene, renderer;
 var physicsWorld;
