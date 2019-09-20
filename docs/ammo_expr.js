@@ -83,6 +83,38 @@ function createObjects() {
   quat.setFromAxisAngle(vec, Math.PI/8);
   vec.set(2.5, 0, 0);
   var cylinder = createRigidBody(object, shape, mass, pos, quat, null, vec);
+
+  var r1 = 1.7, r2 = 1.56, r3 = 0.78;
+  object = new THREE.Mesh(
+	(new THREE.SphereBufferGeometry(1, 20, 20)).scale(r1, r2, r3),
+	new THREE.MeshPhongMaterial({color: 0xffffff})
+  );
+  top = new THREE.Mesh(
+	new THREE.SphereGeometry(0.2, 20,20),
+	new THREE.MeshPhongMaterial({color: 0xff0000})
+  );
+  top.position.set(0, r2, 0);
+  object.add(top);
+  var shape = new Ammo.btSphereShape(1);
+  shape.setLocalScaling(new Ammo.btVector3(r1, r2, r3));
+  pos.set(0, 6, -7);
+  vec.set(0, 0, 1);
+  quat.setFromAxisAngle(vec, -Math.PI/2/90*89);
+  vec.set(4, 0, 0);
+  var ellipsoid = createRigidBody(object, shape, mass, pos, quat, null, vec);
+  /* createRigidBody()内で使っている calculateLocalInertia()は
+	 scalingを反映してないので、自前で慣性モーメントを更新する必要がある。
+	 あと、setLocalScaling()で球を楕円体にしても、衝突判定は
+	 球のままみたい。physicsWorld.updateSingleAabb(ellipsoid)でも
+	 上手く行かん。よく分らん。
+  */
+  ellipsoid.setMassProps(
+	mass,
+	new Ammo.btVector3(
+	  mass * (r2*r2 + r3*r3) / 5,
+	  mass * (r3*r3 + r1*r1) / 5,
+	  mass * (r1*r1 + r2*r2) / 5));
+  ellipsoid.updateInertiaTensor(); // 念の為
 }
 
 function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
