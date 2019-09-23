@@ -115,6 +115,44 @@ function createObjects() {
 	  mass * (r3*r3 + r1*r1) / 5,
 	  mass * (r1*r1 + r2*r2) / 5));
   ellipsoid.updateInertiaTensor(); // 念の為
+
+  object = new THREE.Mesh(
+	  new THREE.BoxBufferGeometry(30, 0.2, 30),
+	  new THREE.MeshPhongMaterial({color: 0xffffff})
+  );
+  shape = new Ammo.btBoxShape(new Ammo.btVector3(15, 0.1, 15));
+  pos.set(0, -5, -7);
+  vec.set(0, 0, 1);
+  quat.setFromAxisAngle(vec, 0);
+  var ground = createRigidBody(object, shape, 0, pos, quat, null, null);
+
+  r1 = 1.5; r2 = 1;
+  object = new THREE.Mesh(
+	new THREE.SphereGeometry(r1, 20,20),
+	new THREE.MeshPhongMaterial({color: 0x00ff00})
+  );
+  var object2 = new THREE.Mesh(
+	new THREE.SphereGeometry(r2, 20,20),
+	new THREE.MeshPhongMaterial({color: 0x00ff00})
+  );
+  object2.position.set(0, r1, 0);
+  object.add(object2);
+  shape = new Ammo.btConvexHullShape();
+  shape.addPoint(new Ammo.btVector3(0, -r1, 0));
+  shape.addPoint(new Ammo.btVector3(r1, 0, 0));
+  shape.addPoint(new Ammo.btVector3(-r1, 0, 0));
+  shape.addPoint(new Ammo.btVector3(0, 0, r1));
+  shape.addPoint(new Ammo.btVector3(0, 0, -r1));
+  shape.addPoint(new Ammo.btVector3(r2, r1, 0));
+  shape.addPoint(new Ammo.btVector3(-r2, r1,  0));
+  shape.addPoint(new Ammo.btVector3(0, r1, r2));
+  shape.addPoint(new Ammo.btVector3(0, r1, -r2));
+  shape.addPoint(new Ammo.btVector3(0, r1 + r2, 0));
+  pos.set(-5, 0, -7);
+  vec.set(0, 0, 1);
+  quat.setFromAxisAngle(vec, Math.PI/1.1);
+  vec.set(0, -2, 0);
+  createRigidBody(object, shape, mass, pos, quat, vec, vec);
 }
 
 function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
